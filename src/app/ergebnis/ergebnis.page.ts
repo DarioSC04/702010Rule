@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { NavController, ToastController } from '@ionic/angular';
 import { Speicher, Rechnung } from '../speicher';
 
@@ -39,6 +39,7 @@ export class ErgebnisPage implements OnInit {
       if (params['einkommen']) {
         this.einkommenNetto = parseFloat(parseFloat(params['einkommen']).toFixed(2));
         this.zeigeKategorien = params['zeigeKategorien'] === 'true';
+        this.kommentar = '';
         this.berechneAufteilung();
       }
     });
@@ -81,6 +82,12 @@ export class ErgebnisPage implements OnInit {
       color: 'success'
     });
     await toast.present();
+  }
+
+  public begrenzKommentar() {
+    if (this.kommentar && this.kommentar.length > 500) {
+      this.kommentar = this.kommentar.substring(0, 500);
+    }
   }
 
   public neuLaden() {

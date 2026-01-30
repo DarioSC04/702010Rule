@@ -11,7 +11,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <div *ngIf="rechnungen.length === 0" style="text-align: center; padding: 20px;">
+  <div *ngIf="rechnungen.length === 0" class="leerer-zustand">
     <p>Keine gespeicherten Rechnungen vorhanden.</p>
   </div>
 
@@ -24,16 +24,16 @@
         <p>20% Sparen: € {{ rechnung.sparenUndSchulden20 | number: '1.2-2' }}</p>
         <p>10% Lifestyle: € {{ rechnung.lifestyleInvestments10 | number: '1.2-2' }}</p>
         
-        <div *ngIf="rechnung.zeigeKategorien && rechnung.wohnen > 0" style="margin-top: 8px; font-size: 12px; color: #666;">
-          <p style="margin: 2px 0;">Wohnen: € {{ rechnung.wohnen | number: '1.2-2' }}</p>
-          <p style="margin: 2px 0;">Essen: € {{ rechnung.essen | number: '1.2-2' }}</p>
-          <p style="margin: 2px 0;">Transport: € {{ rechnung.transport | number: '1.2-2' }}</p>
-          <p style="margin: 2px 0;">Nebenkosten: € {{ rechnung.nebenkosten | number: '1.2-2' }}</p>
-          <p style="margin: 2px 0;">Versicherungen: € {{ rechnung.versicherungen | number: '1.2-2' }}</p>
+        <div *ngIf="rechnung.zeigeKategorien && rechnung.wohnen > 0" class="kategorien-bereich">
+          <p class="kategorien-element">Wohnen: € {{ rechnung.wohnen | number: '1.2-2' }}</p>
+          <p class="kategorien-element">Essen: € {{ rechnung.essen | number: '1.2-2' }}</p>
+          <p class="kategorien-element">Transport: € {{ rechnung.transport | number: '1.2-2' }}</p>
+          <p class="kategorien-element">Nebenkosten: € {{ rechnung.nebenkosten | number: '1.2-2' }}</p>
+          <p class="kategorien-element">Versicherungen: € {{ rechnung.versicherungen | number: '1.2-2' }}</p>
         </div>
 
-        <div *ngIf="rechnung.kommentar" style="margin-top: 8px; font-size: 12px;">
-          <p style="margin: 2px 0;"><strong>Kommentar:</strong> {{ rechnung.kommentar }}</p>
+        <div *ngIf="rechnung.kommentar" class="kommentar-bereich">
+          <p class="kommentar-text"><strong>Kommentar:</strong> {{ rechnung.kommentar }}</p>
         </div>
       </ion-label>
       <ion-button slot="end" color="danger" size="small" (click)="rechnungLoeschen(rechnung.id)">
@@ -43,7 +43,7 @@
     </ion-item>
   </ion-list>
 
-  <ion-button *ngIf="rechnungen.length > 0" color="danger" expand="block" (click)="alleLoeschen()" style="margin: 20px;">
+  <ion-button *ngIf="rechnungen.length > 0" color="danger" expand="block" (click)="alleLoeschen()" class="loesche-alle-schaltflaeche">
     Alle löschen
   </ion-button>
 </ion-content>

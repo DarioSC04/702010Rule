@@ -11,7 +11,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-card style="margin: 16px;">
+  <ion-card>
     <ion-card-header>
       <ion-card-title>Berechnung starten</ion-card-title>
       <ion-card-subtitle>Gib dein Einkommen ein und wähle die Häufigkeit</ion-card-subtitle>
@@ -20,7 +20,7 @@
     <ion-card-content>
       <ion-list>
         <ion-item lines="none">
-          <ion-label style="font-weight: 500; font-size: 16px;">Einkommenshäufigkeit</ion-label>
+          <ion-label class="titel-label">Einkommenshäufigkeit</ion-label>
         </ion-item>
 
         <ion-radio-group [(ngModel)]="frequenz" name="frequenzGroup">
@@ -36,18 +36,18 @@
         </ion-radio-group>
 
         <ion-item>
-          <ion-label position="stacked" style="font-weight: 500; font-size: 16px;">Nettoeinkommen</ion-label>
+          <ion-label position="stacked" class="titel-label">Nettoeinkommen</ion-label>
           <ion-input 
             placeholder="z.B. 3000" 
             [(ngModel)]="einkommenNettoFormatted"
             (ngModelChange)="formatierePunkteEingabe($event)"
             type="text"
-            style="font-size: 16px;">
+            class="eingabe-groß">
           </ion-input>
         </ion-item>
       </ion-list>
 
-      <ion-button expand="block" color="primary" (click)="berechnen()" style="margin-top: 16px;">
+      <ion-button expand="block" color="primary" (click)="berechnen()" class="schaltflaeche-abstand">
         <ion-icon name="calculator" slot="start"></ion-icon>
         Berechnen
       </ion-button>
