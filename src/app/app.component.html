@@ -1,3 +1,22 @@
 <ion-app>
   <ion-router-outlet></ion-router-outlet>
+  
+  <ion-tabs>
+    <ion-tab-bar slot="bottom" color="light">
+      <ion-tab-button tab="home" href="/home">
+        <ion-icon name="calculator"></ion-icon>
+        <ion-label>Berechnen</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="gespeicherte-ergebnisse" href="/gespeicherte-ergebnisse">
+        <ion-icon name="list"></ion-icon>
+        <ion-label>Datenbank</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="hilfetext" href="/hilfetext">
+        <ion-icon name="information-circle"></ion-icon>
+        <ion-label>Info</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
 </ion-app>

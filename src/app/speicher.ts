@@ -2,51 +2,69 @@ import { Injectable } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
 import {Storage} from '@ionic/storage-angular'
 
+export interface Rechnung {
+  id: string;
+  einkommen: number;
+  gesamterGrundbedarf70: number;
+  sparenUndSchulden20: number;
+  lifestyleInvestments10: number;
+  Wohnen: number;
+  Essen: number;
+  Transport: number;
+  Nebenkosten: number;
+  Versicherungen: number;
+  datum: Date;
+}
+  
+
 @Injectable({
   providedIn: 'root',
 })
 export class Speicher {
 
+  private rechnungen: Rechnung[] = [];
 
+  constructor (private storage: Storage){
+    this.storage.create();
+    this.loadRechnungen();
+  }
 
+  // Neue Rechnung hinzufügen und speichern
+  async addRechnung(rechnung: Rechnung): Promise<void> {
+    this.rechnungen.push(rechnung);
+    await this.storage.set('rechnungen', this.rechnungen);
+  }
 
-} 
+  // Alle Rechnungen abrufen
+  getRechnungen(): Rechnung[] {
+    return this.rechnungen;
+  }
 
+  // Eine Rechnung löschen (nach ID)
+  async deleteRechnung(id: string): Promise<void> {
+    this.rechnungen = this.rechnungen.filter(r => r.id !== id);
+    await this.storage.set('rechnungen', this.rechnungen);
+  }
 
-/** this.storage.get(abkuerzungNormiert); 
-
-this.storage.set(abkuerzungNormiert, bedeutungenArrayNeu); **/
-
-    /*Was brauche ich: Eine funktion die ein objekt im array speichert, eine funktion die en ganzen array ausliest, eine funktion, Eine funktion die letztes obekt im array löscht, eine funktion die alle objekte im array löscht. */ 
-
-
-   /* public async speichereBedeutungFuerAbkuerzung(abkuerzung: string, bedeutung: string): Promise<number> {
-
-      let bedeutungenArrayNeu = null;
-
-      let bedeutungenArrayAlt = await this.holeBedeutungenFuerAbk(abkuerzung);
-
-      const abkuerzungNormiert = abkuerzung.trim().toUpperCase();
-
-      if (bedeutungenArrayAlt === null || bedeutungenArrayAlt === undefined) {
-
-          // Für die Abkürzung ist noch überhaupt keine Bedeutung gespeichert
-
-          bedeutungenArrayNeu = [ bedeutung ];
-
-          await this.storage.set(abkuerzungNormiert, bedeutungenArrayNeu);
-
-          return 1;
-
-        } else { // Für die Abkürzung war schon mindestens eine Bedeutung abgespeichert
-
-          bedeutungenArrayNeu = bedeutungenArrayAlt;
-          bedeutungenArrayNeu.push(bedeutung);
-
-          await this.storage.set(abkuerzungNormiert, bedeutungenArrayNeu);
-
-          return bedeutungenArrayNeu.length;
-        }
+  // Letztes Objekt im Array löschen
+  async deleteLast(): Promise<void> {
+    if (this.rechnungen.length > 0) {
+      this.rechnungen.pop();
+      await this.storage.set('rechnungen', this.rechnungen);
     }
+  }
 
-} */ 
+  // Alle Objekte im Array löschen
+  async deleteAll(): Promise<void> {
+    this.rechnungen = [];
+    await this.storage.set('rechnungen', []);
+  }
+
+  // Rechnungen aus Storage laden
+  private async loadRechnungen(): Promise<void> {
+    const data = await this.storage.get('rechnungen');
+    if (data) {
+      this.rechnungen = data;
+    }
+  }
+} 

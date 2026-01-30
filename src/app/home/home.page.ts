@@ -58,7 +58,8 @@ export class HomePage {
     if (this.frequenz === 'annual') {
       einkommen = this.einkommenNetto / 12;
     }
-
+    console.log('Einkommen für Berechnung:', einkommen);
+    
     // Navigiere zur Ergebnis-Seite und übergebe die Daten
     this.navCtrl.navigateForward('/ergebnis', {
       queryParams: {

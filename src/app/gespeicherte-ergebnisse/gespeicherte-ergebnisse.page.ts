@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Speicher } from '../speicher';
+import { Speicher, Rechnung } from '../speicher';
 
 @Component({
   selector: 'app-gespeicherte-ergebnisse',
@@ -9,9 +9,30 @@ import { Speicher } from '../speicher';
 })
 export class GespeicherteErgebnissePage implements OnInit {
 
-  constructor(private Speicher: Speicher) { }
+  public rechnungen: Rechnung[] = [];
+
+  constructor(private speicher: Speicher) { }
 
   ngOnInit() {
+    this.loadRechnungen();
+  }
+
+  ionViewWillEnter() {
+    this.loadRechnungen();
+  }
+
+  public loadRechnungen() {
+    this.rechnungen = this.speicher.getRechnungen();
+  }
+
+  public async deleteRechnung(id: string) {
+    await this.speicher.deleteRechnung(id);
+    this.loadRechnungen();
+  }
+
+  public async deleteAll() {
+    await this.speicher.deleteAll();
+    this.loadRechnungen();
   }
 
 }

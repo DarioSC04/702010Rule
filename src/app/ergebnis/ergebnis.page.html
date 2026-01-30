@@ -1,59 +1,136 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Ergebnis</ion-title>
+    <ion-title>70/20/10 Rule Rechner</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="false">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Ihre Ergebnisse</ion-title>
+    </ion-toolbar>
+  </ion-header>
 
-    <div id="container">
-   <strong style="display:block;">Monatliche optimale Ausgaben nach der 70/20/10 Regel: </strong>
-  
+  <ion-card style="margin: 16px;">
+    <ion-card-header>
+      <ion-card-title>Optimale Ausgaben nach der 70/20/10 Regel</ion-card-title>
+      <ion-card-subtitle>Monatliche Verteilung</ion-card-subtitle>
+    </ion-card-header>
 
-  <ion-list>
-    <ion-item>
-      <ion-input label="Einkommen nach Steuern" [(ngModel)]="einkommenNetto" (ngModelChange)="calcPercentiles100()" labelPlacement="stacked" placeholder="Wert eingeben"></ion-input>
-    </ion-item>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-input 
+            label="Einkommen nach Steuern" 
+            [(ngModel)]="einkommenNetto" 
+            (ngModelChange)="calcPercentiles100()" 
+            labelPlacement="stacked" 
+            placeholder="z.B. 3000"
+            type="number">
+          </ion-input>
+        </ion-item>
 
-    <ion-item>
-      <ion-input label="Wesentliche Kosten (70%)" [(ngModel)]="gesamterGrundbedarf70" labelPlacement="stacked" placeholder="Wert eingeben"></ion-input>
-    </ion-item>
-  </ion-list>
+        <ion-item>
+          <ion-input 
+            label="Wesentliche Kosten (70%)" 
+            [(ngModel)]="gesamterGrundbedarf70" 
+            labelPlacement="stacked" 
+            placeholder="wird berechnet"
+            disabled>
+          </ion-input>
+        </ion-item>
 
-<ion-list *ngIf="showKategorien">
-    <ion-item>
-      <ion-input label="Wohnen" [(ngModel)]="Wohnen" labelPlacement="stacked" placeholder="Wert eingeben"></ion-input>
-    </ion-item>
+        <ion-item>
+          <ion-input 
+            label="Sparen & Schulden (20%)" 
+            [(ngModel)]="sparenUndSchulden20" 
+            labelPlacement="stacked" 
+            placeholder="wird berechnet"
+            disabled>
+          </ion-input>
+        </ion-item>
 
-    <ion-item>
-      <ion-input label="Essen" [(ngModel)]="Essen" labelPlacement="stacked" placeholder="Wert eingeben"></ion-input>
-    </ion-item>
+        <ion-item>
+          <ion-input 
+            label="Lifestyle/Investments (10%)" 
+            [(ngModel)]="lifestyleInvestments10" 
+            labelPlacement="stacked" 
+            placeholder="wird berechnet"
+            disabled>
+          </ion-input>
+        </ion-item>
+      </ion-list>
 
-    <ion-item>
-      <ion-input label="Transport" [(ngModel)]="Transport"labelPlacement="stacked" placeholder="Wert eingeben"></ion-input>
-    </ion-item>
+      <ion-toggle [(ngModel)]="showKategorien" style="margin-top: 16px;">
+        <ion-label>Detaillierte Kategorien anzeigen</ion-label>
+      </ion-toggle>
+    </ion-card-content>
+  </ion-card>
 
-    <ion-item>
-      <ion-input label="Nebenkosten" [(ngModel)]="Nebenkosten" labelPlacement="stacked" placeholder="Wert eingeben"></ion-input>
-    </ion-item>
+  <ion-card *ngIf="showKategorien" style="margin: 16px;">
+    <ion-card-header>
+      <ion-card-title>Detaillierte Aufteilung (70%)</ion-card-title>
+    </ion-card-header>
 
-    <ion-item>
-      <ion-input label="Versicherungen" [(ngModel)]="Versicherungen" labelPlacement="stacked" placeholder="Wert eingeben"></ion-input>
-    </ion-item>
-</ion-list>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-input 
+            label="Wohnen (40%)" 
+            [(ngModel)]="Wohnen" 
+            labelPlacement="stacked" 
+            disabled>
+          </ion-input>
+        </ion-item>
 
-<ion-list>
-    <ion-item>
-      <ion-input label="Sparen & Schulden (20%)" [(ngModel)]="sparenUndSchulden20"  labelPlacement="stacked" placeholder="Wert eingeben"></ion-input>
-    </ion-item>
+        <ion-item>
+          <ion-input 
+            label="Essen (20%)" 
+            [(ngModel)]="Essen" 
+            labelPlacement="stacked" 
+            disabled>
+          </ion-input>
+        </ion-item>
 
-      <ion-item>
-      <ion-input label="Lifestyle/Investments (10%)" [(ngModel)]="lifestyleInvestments10" labelPlacement="stacked" placeholder="Wert eingeben"></ion-input>
-    </ion-item>
-</ion-list>
-</div>
+        <ion-item>
+          <ion-input 
+            label="Transport (15%)" 
+            [(ngModel)]="Transport" 
+            labelPlacement="stacked" 
+            disabled>
+          </ion-input>
+        </ion-item>
 
-<ion-button (click)="neuLaden()">Rechner neu laden</ion-button> 
-<ion-button>Rechnung speichern</ion-button> 
+        <ion-item>
+          <ion-input 
+            label="Nebenkosten (15%)" 
+            [(ngModel)]="Nebenkosten" 
+            labelPlacement="stacked" 
+            disabled>
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input 
+            label="Versicherungen (10%)" 
+            [(ngModel)]="Versicherungen" 
+            labelPlacement="stacked" 
+            disabled>
+          </ion-input>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <div style="padding: 16px; display: flex; gap: 8px;">
+    <ion-button expand="block" color="success" (click)="speichernRechnung()">
+      <ion-icon name="save" slot="start"></ion-icon>
+      Speichern
+    </ion-button>
+    <ion-button expand="block" color="medium" (click)="neuLaden()">
+      <ion-icon name="refresh" slot="start"></ion-icon>
+      Neu laden
+    </ion-button>
+  </div>
 
 </ion-content>

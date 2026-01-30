@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { Speicher, Rechnung } from '../speicher';
 
 @Component({
   selector: 'app-ergebnis',
@@ -26,7 +27,11 @@ export class ErgebnisPage implements OnInit {
   public showKategorien: boolean = false;
   public frequenz: string = 'monthly';
 
-  constructor(private activatedRoute: ActivatedRoute, private navCtrl: NavController) { }
+  constructor(
+  private speicher: Speicher,
+  private activatedRoute: ActivatedRoute,
+  private navCtrl: NavController
+) {}
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(params => {
@@ -40,15 +45,36 @@ export class ErgebnisPage implements OnInit {
   }
 
   public calcPercentiles100() {
-    this.gesamterGrundbedarf70 = this.einkommenNetto * 0.7;
-    this.sparenUndSchulden20 = this.einkommenNetto * 0.2;
-    this.lifestyleInvestments10 = this.einkommenNetto * 0.1;
-    this.Wohnen = this.gesamterGrundbedarf70 * 0.4;
-    this.Essen = this.gesamterGrundbedarf70 * 0.2;
-    this.Transport = this.gesamterGrundbedarf70 * 0.15;
-    this.Nebenkosten = this.gesamterGrundbedarf70 * 0.15;
-    this.Versicherungen = this.gesamterGrundbedarf70 * 0.1;
+    this.gesamterGrundbedarf70 = parseFloat((this.einkommenNetto * 0.7).toFixed(2));
+    this.sparenUndSchulden20 = parseFloat((this.einkommenNetto * 0.2).toFixed(2));
+    this.lifestyleInvestments10 = parseFloat((this.einkommenNetto * 0.1).toFixed(2));
+    this.Wohnen = parseFloat((this.gesamterGrundbedarf70 * 0.4).toFixed(2));
+    this.Essen = parseFloat((this.gesamterGrundbedarf70 * 0.2).toFixed(2));
+    this.Transport = parseFloat((this.gesamterGrundbedarf70 * 0.15).toFixed(2));
+    this.Nebenkosten = parseFloat((this.gesamterGrundbedarf70 * 0.15).toFixed(2));
+    this.Versicherungen = parseFloat((this.gesamterGrundbedarf70 * 0.1).toFixed(2));
   }
+
+  
+  public async speichernRechnung() {
+    const rechnung: Rechnung = {
+      id: Date.now().toString(),
+      einkommen: this.einkommenNetto,
+      gesamterGrundbedarf70: this.gesamterGrundbedarf70,
+      sparenUndSchulden20: this.sparenUndSchulden20,
+      lifestyleInvestments10: this.lifestyleInvestments10,
+      Wohnen: this.Wohnen,
+      Essen: this.Essen,
+      Transport: this.Transport,
+      Nebenkosten: this.Nebenkosten,
+      Versicherungen: this.Versicherungen,
+      datum: new Date()
+    };
+
+    await this.speicher.addRechnung(rechnung);
+    console.log('Rechnung gespeichert!');
+  }
+    
 
   public neuLaden() {
     this.einkommenNetto = 0;
@@ -64,101 +90,3 @@ export class ErgebnisPage implements OnInit {
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  /* public calcPercentiles70() {
-    this.einkommenNetto = this.gesamterGrundbedarf70 / 0.7;
-    this.sparenUndSchulden20 = this.einkommenNetto * 0.2;
-    this.lifestyleInvestments10 = this.einkommenNetto * 0.1;
-    this.Wohnen = this.gesamterGrundbedarf70 * 0.4;
-    this.Essen = this.gesamterGrundbedarf70 * 0.2;
-    this.Transport = this.gesamterGrundbedarf70 * 0.15;
-    this.Nebenkosten = this.gesamterGrundbedarf70 * 0.15;
-    this.Versicherungen = this.gesamterGrundbedarf70 * 0.1;
-  }
-
-  public calcPercentiles20() {
-    this.einkommenNetto = this.sparenUndSchulden20 / 0.2;
-    this.gesamterGrundbedarf70 = this.einkommenNetto * 0.7;
-    this.lifestyleInvestments10 = this.einkommenNetto * 0.1;
-    this.Wohnen = this.gesamterGrundbedarf70 * 0.4;
-    this.Essen = this.gesamterGrundbedarf70 * 0.2;
-    this.Transport = this.gesamterGrundbedarf70 * 0.15;
-    this.Nebenkosten = this.gesamterGrundbedarf70 * 0.15;
-    this.Versicherungen = this.gesamterGrundbedarf70 * 0.1;
-  }
-
-  public calcPercentiles10() {
-    this.einkommenNetto = this.lifestyleInvestments10 / 0.1;
-    this.sparenUndSchulden20 = this.einkommenNetto * 0.2;
-    this.gesamterGrundbedarf70 = this.einkommenNetto * 0.7;
-    this.Wohnen = this.gesamterGrundbedarf70 * 0.4;
-    this.Essen = this.gesamterGrundbedarf70 * 0.2;
-    this.Transport = this.gesamterGrundbedarf70 * 0.15;
-    this.Nebenkosten = this.gesamterGrundbedarf70 * 0.15;
-    this.Versicherungen = this.gesamterGrundbedarf70 * 0.1;
-  }
-
-  public calcPercentilesWohnen() {
-    this.gesamterGrundbedarf70 = this.Wohnen / 0.4;
-    this.Essen = this.gesamterGrundbedarf70 * 0.2;
-    this.Transport = this.gesamterGrundbedarf70 * 0.15;
-    this.Nebenkosten = this.gesamterGrundbedarf70 * 0.15;
-    this.Versicherungen = this.gesamterGrundbedarf70 * 0.1;
-    this.calcPercentiles70();
-  }
-
-  public calcPercentilesEssen() {
-    this.gesamterGrundbedarf70 = this.Essen / 0.2;
-    this.Wohnen = this.gesamterGrundbedarf70 * 0.4;
-    this.Transport = this.gesamterGrundbedarf70 * 0.15;
-    this.Nebenkosten = this.gesamterGrundbedarf70 * 0.15;
-    this.Versicherungen = this.gesamterGrundbedarf70 * 0.1;
-    this.calcPercentiles70();
-  }
-
-  public calcPercentilesTransport() {
-    this.gesamterGrundbedarf70 = this.Transport / 0.15;
-    this.Wohnen = this.gesamterGrundbedarf70 * 0.4;
-    this.Essen = this.gesamterGrundbedarf70 * 0.2;
-    this.Nebenkosten = this.gesamterGrundbedarf70 * 0.15;
-    this.Versicherungen = this.gesamterGrundbedarf70 * 0.1;
-    this.calcPercentiles70();
-  }
-
-  public calcPercentilesNebenkosten() {
-    this.gesamterGrundbedarf70 = this.Nebenkosten / 0.15;
-    this.Wohnen = this.gesamterGrundbedarf70 * 0.4;
-    this.Essen = this.gesamterGrundbedarf70 * 0.2;
-    this.Transport = this.gesamterGrundbedarf70 * 0.15;
-    this.Versicherungen = this.gesamterGrundbedarf70 * 0.1;
-    this.calcPercentiles70();
-  }
-
-  public calcPercentilesVersicherungen() {
-    this.gesamterGrundbedarf70 = this.Versicherungen / 0.1;
-    this.Wohnen = this.gesamterGrundbedarf70 * 0.4;
-    this.Essen = this.gesamterGrundbedarf70 * 0.2;
-    this.Transport = this.gesamterGrundbedarf70 * 0.15;
-    this.Nebenkosten = this.gesamterGrundbedarf70 * 0.15;
-    this.calcPercentiles70();
-  }
- */
