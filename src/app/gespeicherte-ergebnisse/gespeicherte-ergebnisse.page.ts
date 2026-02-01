@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 import { Speicher, Rechnung } from '../speicher';
 
 @Component({
@@ -11,7 +12,7 @@ export class GespeicherteErgebnissePage implements OnInit {
 
   public rechnungen: Rechnung[] = [];
 
-  constructor(private speicher: Speicher) {}
+  constructor(private speicher: Speicher, private alertController: AlertController) {}
 
   ngOnInit() {
     this.rechnungenLaden();
@@ -26,13 +27,47 @@ export class GespeicherteErgebnissePage implements OnInit {
   }
 
   public async rechnungLoeschen(id: string) {
-    await this.speicher.rechnungLoeschen(id);
-    this.rechnungenLaden();
+    const alert = await this.alertController.create({
+      header: 'Eintrag löschen?',
+      message: 'Möchtest du diesen Eintrag wirklich löschen? Dies kann nicht rückgängig gemacht werden.',
+      buttons: [
+        {
+          text: 'Abbrechen',
+          role: 'cancel'
+        },
+        {
+          text: 'Löschen',
+          role: 'destructive',
+          handler: async () => {
+            await this.speicher.rechnungLoeschen(id);
+            this.rechnungenLaden();
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   public async alleLoeschen() {
-    await this.speicher.alleLoeschen();
-    this.rechnungenLaden();
+    const alert = await this.alertController.create({
+      header: 'Alle Einträge löschen?',
+      message: 'Möchtest du wirklich ALLE Einträge löschen? Dies kann nicht rückgängig gemacht werden!',
+      buttons: [
+        {
+          text: 'Abbrechen',
+          role: 'cancel'
+        },
+        {
+          text: 'Alle löschen',
+          role: 'destructive',
+          handler: async () => {
+            await this.speicher.alleLoeschen();
+            this.rechnungenLaden();
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
 }

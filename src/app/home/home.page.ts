@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { AlertController, NavController } from '@ionic/angular';
 
+enum Haeufigkeit {
+  MONATLICH = 'monthly',
+  JAEHRLICH = 'annual'
+}
 
 @Component({
   selector: 'app-home',
@@ -12,7 +16,7 @@ export class HomePage {
 
   public einkommenNetto: number | null = null;
   public einkommenNettoFormatted: string = '';
-  public frequenz: string = 'monthly';
+  public frequenz: Haeufigkeit = Haeufigkeit.MONATLICH;
   public zeigeKategorien: boolean = false;
 
   constructor(private alertController: AlertController,
@@ -25,7 +29,7 @@ export class HomePage {
   public reset() {
     this.einkommenNetto = null;
     this.einkommenNettoFormatted = '';
-    this.frequenz = 'monthly';
+    this.frequenz = Haeufigkeit.MONATLICH;
     this.zeigeKategorien = false;
   }
 
@@ -56,21 +60,24 @@ export class HomePage {
       return;
     }
 
-    if (this.einkommenNetto > 1000000) {
-      this.showAlert('Fehler', 'Das Einkommen ist zu hoch! Bitte geben Sie einen realistischen Wert ein. (<= 1.000.000)');
+    const maxEinkommen = this.frequenz === Haeufigkeit.JAEHRLICH ? 12000000 : 1000000;
+    const haeufigkeitText = this.frequenz === Haeufigkeit.JAEHRLICH ? 'jährliche' : 'monatliche';
+    const maxAnzeige = this.frequenz === Haeufigkeit.JAEHRLICH ? '12.000.000' : '1.000.000';
+    if (this.einkommenNetto > maxEinkommen) {
+      this.showAlert('Fehler', `Das ${haeufigkeitText} Einkommen darf nicht höher als ${maxAnzeige} € sein!`);
       return;
     }
 
-    let einkommen = this.einkommenNetto;
+    let monatsEinkommen = this.einkommenNetto;
 
-    if (this.frequenz === 'annual') {
-      einkommen = this.einkommenNetto / 12;
+    if (this.frequenz === Haeufigkeit.JAEHRLICH) {
+      monatsEinkommen = this.einkommenNetto / 12;
     }
-    console.log('Einkommen für Berechnung:', einkommen);
+    console.log('Einkommen für Berechnung:', monatsEinkommen);
 
     this.navCtrl.navigateForward('/ergebnis', {
       queryParams: {
-        einkommen: einkommen,
+        einkommen: monatsEinkommen,
         frequenz: this.frequenz,
         zeigeKategorien: String(this.zeigeKategorien)
       }

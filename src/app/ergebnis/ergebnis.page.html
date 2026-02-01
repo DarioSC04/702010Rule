@@ -11,7 +11,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-card style="margin: 16px;">
+  <ion-card>
     <ion-card-header>
       <ion-card-title>Optimale Ausgaben nach der 70/20/10 Regel</ion-card-title>
       <ion-card-subtitle>Monatliche Verteilung</ion-card-subtitle>
@@ -58,13 +58,13 @@
         </ion-item>
       </ion-list>
 
-      <ion-toggle [(ngModel)]="zeigeKategorien" style="margin-top: 16px;">
+      <ion-toggle [(ngModel)]="zeigeKategorien" class="umschalter-abstand">
         <ion-label>Detaillierte Kategorien anzeigen</ion-label>
       </ion-toggle>
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="zeigeKategorien" style="margin: 16px;">
+  <ion-card *ngIf="zeigeKategorien">
     <ion-card-header>
       <ion-card-title>Detaillierte Aufteilung (70%)</ion-card-title>
     </ion-card-header>
@@ -114,7 +114,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card style="margin: 16px;">
+  <ion-card>
     <ion-card-header>
       <ion-card-title>Kommentare</ion-card-title>
     </ion-card-header>
@@ -124,15 +124,18 @@
         <ion-textarea 
           label="Notizen zu dieser Berechnung" 
           [(ngModel)]="kommentar"
+          (ngModelChange)="begrenzKommentar()"
           placeholder="z.B. Sparpläne für Q1..."
           rows="4"
+          maxlength="500"
           labelPlacement="stacked">
         </ion-textarea>
       </ion-item>
+      <p class="zeichenanzahl">{{ kommentar?.length || 0 }}/500 Zeichen</p>
     </ion-card-content>
   </ion-card>
 
-  <div style="padding: 16px; display: flex; gap: 8px;">
+  <div class="schaltflaechen-behaelter">
     <ion-button expand="block" color="success" (click)="speichernRechnung()">
       <ion-icon name="save" slot="start"></ion-icon>
       Speichern
